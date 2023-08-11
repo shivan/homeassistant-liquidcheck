@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from homeassistant.const import (
     UnitOfVolume,
+    UnitOfLength,
     PERCENTAGE,
 )
 
@@ -16,7 +17,7 @@ SENSOR_TYPES = {
     "device": ["Device", None, "", "data", "device/name"],
     "firmware": ["Firmware Version", None, "", "data", "device/firmware"],
     "measure_percent": ["Füllstand", PERCENTAGE, "", "data", "measure/percent"],
-    "level": ["Level", None, "", "data", "measure/level"],
+    "level": ["Pegelstand", UnitOfLength.METERS, "", "data", "measure/level"],
     "content_liters": ["Inhalt", UnitOfVolume.LITERS, "", "data", "measure/content"],
     "age": ["Alter", None, "", "data", "measure/age"],
     "error": ["Fehler", None, "", "data", "system/error"],
