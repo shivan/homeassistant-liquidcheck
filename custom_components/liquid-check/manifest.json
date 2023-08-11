@@ -1,0 +1,11 @@
+{
+  "domain": "liquid-check",
+  "version": "1.0.0",
+  "name": "Liquid-Check",
+  "documentation": "https://github.com/shivan/homeassistant-liquidcheck",
+  "config_flow": true,
+  "dependencies": [],
+  "codeowners": ["@shivan"],
+  "requirements": [],
+  "iot_class": "local_polling"
+}

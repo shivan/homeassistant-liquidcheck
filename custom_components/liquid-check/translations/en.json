@@ -1,0 +1,18 @@
+{
+  "config": {
+    "title": "Liquid-Check",
+    "step": {
+      "user": {
+        "data": {
+          "host": "The ip address of the liquid-check device"
+        }
+      }
+    },
+    "error": {
+      "host_exists": "This host is already configured"
+    },
+    "abort": {
+      "host_exists": "This host is already configured"
+    }
+  }
+}
