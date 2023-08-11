@@ -1,6 +1,6 @@
 {
-  "config": {
-    "title": "Liquid-Check",
+  "title": "Liquid-Check",
+  "config": {    
     "step": {
       "user": {
         "data": {
