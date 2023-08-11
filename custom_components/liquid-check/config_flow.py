@@ -23,7 +23,7 @@ SUPPORTED_SENSOR_TYPES = list(SENSOR_TYPES)
 DEFAULT_MONITORED_CONDITIONS = [
     "firmware",
     "measure_percent",
-    "content",
+    "content_liters",
 ]
 
 
