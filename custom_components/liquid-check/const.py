@@ -17,7 +17,7 @@ SENSOR_TYPES = {
     "firmware": ["Firmware Version", None, "", "data", "device/firmware"],
     "measure_percent": ["Füllstand", PERCENTAGE, "", "data", "measure/percent"],
     "level": ["Level", None, "", "data", "measure/level"],
-    "content": ["Füllstand", UnitOfVolume.LITERS, "", "data", "measure/conent"],
+    "content_liters": ["Inhalt", UnitOfVolume.LITERS, "", "data", "measure/content"],
     "age": ["Alter", None, "", "data", "measure/age"],
     "error": ["Fehler", None, "", "data", "system/error"],
 }

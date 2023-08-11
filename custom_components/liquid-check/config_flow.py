@@ -78,7 +78,7 @@ class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
                 if can_connect:
                     return self.async_create_entry(
-                        title=f"{self._info['device']} - {self._info['number']}",
+                        title=f"{self._info['payload']['device']['name']}",
                         data={
                             CONF_HOST: host,
                             CONF_MONITORED_CONDITIONS: conditions,
@@ -86,7 +86,7 @@ class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
         else:
             user_input = {}
-            user_input[CONF_HOST] = "192.168.0.?"
+            user_input[CONF_HOST] = "liquid-check"
             user_input[CONF_MONITORED_CONDITIONS] = DEFAULT_MONITORED_CONDITIONS
 
         default_monitored_conditions = (

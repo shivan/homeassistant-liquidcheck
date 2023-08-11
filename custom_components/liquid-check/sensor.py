@@ -1,4 +1,4 @@
-"""The liquid-chekc integration."""
+"""The liquid-check integration."""
 
 import logging
 from homeassistant.const import CONF_MONITORED_CONDITIONS
@@ -39,11 +39,11 @@ class LiquidCheckDevice(CoordinatorEntity):
         self._last_value = None
         self._unit_of_measurement = SENSOR_TYPES[self.type][1]
         self._icon = SENSOR_TYPES[self.type][2]
-        self.serial_number = self.coordinator.data["device"]["uuid"]
-        self.model = self.coordinator.data["device"]["name"]
+        self.serial_number = self.coordinator.data[self._data_source]["device"]["uuid"]
+        self.model = self.coordinator.data[self._data_source]["device"]["name"]
         _LOGGER.debug(self.coordinator)
 
-    def getDataByPath(dataObject, jsonPath):
+    def getDataByPath(self, dataObject, jsonPath):
         keys = jsonPath.split('/')
         value = dataObject
         for key in keys:

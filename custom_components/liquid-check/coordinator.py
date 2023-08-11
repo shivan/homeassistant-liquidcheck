@@ -51,7 +51,7 @@ class LiquidCheckDataUpdateCoordinator(DataUpdateCoordinator):
     def data_update(self):
         """Update liquid check data."""
         try:
-            response = requests.get(f"http://{self._host}/data.jsn")
+            response = requests.get(f"http://{self._host}/infos.json")
             data = json.loads(response.text)
             _LOGGER.debug(data)
             return data
