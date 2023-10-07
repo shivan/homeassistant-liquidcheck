@@ -1,5 +1,5 @@
 {
-  "domain": "liquid-check",
+  "domain": "liquid_check",
   "name": "Liquid-Check",
   "codeowners": ["@shivan"],
   "config_flow": true,
