@@ -11,7 +11,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Add an LiquidCheck entry."""
+    """Add an Liquid-Check entry."""
     coordinator: LiquidCheckDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id][
         DATA_COORDINATOR
     ]
@@ -24,7 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class LiquidCheckDevice(CoordinatorEntity):
-    """Representation of a LiquidCheck device."""
+    """Representation of a Liquid-Check device."""
 
     def __init__(self, coordinator, sensor_type, name):
         """Initialize the sensor."""

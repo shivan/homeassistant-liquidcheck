@@ -7,7 +7,7 @@ from homeassistant.const import (
     PERCENTAGE,
 )
 
-DOMAIN = "liquid-check"
+DOMAIN = "liquid_check"
 
 DATA_COORDINATOR = "corrdinator"
 

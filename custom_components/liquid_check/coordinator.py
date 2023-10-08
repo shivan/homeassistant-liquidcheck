@@ -1,4 +1,4 @@
-"""Provides the LiquidCheck DataUpdateCoordinator."""
+"""Provides the Liquid-Check DataUpdateCoordinator."""
 from datetime import timedelta
 import logging
 import requests
@@ -16,10 +16,10 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class LiquidCheckDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching LiquidCheck data."""
+    """Class to manage fetching Liquid-Check data."""
 
     def __init__(self, hass: HomeAssistantType, *, config: dict, options: dict):
-        """Initialize global liquitdcheck data updater."""
+        """Initialize global liquitd-check data updater."""
         self._host = config[CONF_HOST]
         self._next_update = 0
         update_interval = timedelta(seconds=30)
@@ -35,7 +35,7 @@ class LiquidCheckDataUpdateCoordinator(DataUpdateCoordinator):
         """Fetch data from LiquidCheck."""
 
         def _update_data() -> dict:
-            """Fetch data from LiquidCheck via sync functions."""
+            """Fetch data from Liquid-Check via sync functions."""
             data = self.data_update()
 
             return {
