@@ -7,7 +7,7 @@ import json
 from async_timeout import timeout
 from homeassistant.util.dt import utcnow
 from homeassistant.const import CONF_HOST
-from homeassistant.helpers.typing import HomeAssistantType
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import DOMAIN
@@ -18,7 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 class LiquidCheckDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching Liquid-Check data."""
 
-    def __init__(self, hass: HomeAssistantType, *, config: dict, options: dict):
+    def __init__(self, hass: HomeAssistant, *, config: dict, options: dict):
         """Initialize global liquitd-check data updater."""
         self._host = config[CONF_HOST]
         self._next_update = 0
