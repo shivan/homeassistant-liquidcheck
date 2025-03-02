@@ -46,7 +46,7 @@ async def async_setup(hass, config):
     return True
 
 
-async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
+async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry) -> bool:
     """Load the saved entities."""
     coordinator = LiquidCheckDataUpdateCoordinator(
         hass,
@@ -63,7 +63,5 @@ async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
         DATA_COORDINATOR: coordinator,
     }
 
-    hass.async_create_task(
-        await hass.async_forward_entry_setups(entry, "sensor")
-    )
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
     return True
