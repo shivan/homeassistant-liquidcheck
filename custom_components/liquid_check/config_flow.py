@@ -78,7 +78,7 @@ class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
                 if can_connect:
                     return self.async_create_entry(
-                        title=f"{self._info['payload']['device']['name']}",
+                        title=host,
                         data={
                             CONF_HOST: host,
                             CONF_MONITORED_CONDITIONS: conditions,

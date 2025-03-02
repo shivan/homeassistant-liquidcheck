@@ -1,7 +1,7 @@
 """The liquid-check integration."""
 
 import logging
-from homeassistant.const import CONF_MONITORED_CONDITIONS
+from homeassistant.const import CONF_MONITORED_CONDITIONS, CONF_HOST
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import SENSOR_TYPES, DOMAIN, DATA_COORDINATOR
@@ -18,15 +18,17 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     entities = []
 
+    host = entry.data[CONF_HOST]
+
     for sensor in entry.data[CONF_MONITORED_CONDITIONS]:
-        entities.append(LiquidCheckDevice(coordinator, sensor, entry.title))
+        entities.append(LiquidCheckDevice(coordinator, sensor, entry.title, host))
     async_add_entities(entities)
 
 
 class LiquidCheckDevice(CoordinatorEntity):
     """Representation of a Liquid-Check device."""
 
-    def __init__(self, coordinator, sensor_type, name):
+    def __init__(self, coordinator, sensor_type, name, host):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._sensor = SENSOR_TYPES[sensor_type][0]
@@ -39,8 +41,11 @@ class LiquidCheckDevice(CoordinatorEntity):
         self._last_value = None
         self._unit_of_measurement = SENSOR_TYPES[self.type][1]
         self._icon = SENSOR_TYPES[self.type][2]
-        self.serial_number = self.coordinator.data[self._data_source]["device"]["uuid"]
+        self.serial_number = self.coordinator.data[self._data_source]["device"]["uuid"] + host
         self.model = self.coordinator.data[self._data_source]["device"]["name"]
+        self._host = host
+        self._attr_unique_id = f"{host}_{sensor_type}"
+        self._attr_name = f"LiquidCheck {host} {sensor_type}"
         _LOGGER.debug(self.coordinator)
 
     def getDataByPath(self, dataObject, jsonPath):
