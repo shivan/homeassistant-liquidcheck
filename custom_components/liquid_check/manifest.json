@@ -1,12 +1,17 @@
 {
-  "domain": "liquid_check",
-  "name": "Liquid-Check",
-  "codeowners": ["@shivan"],
-  "config_flow": true,
-  "dependencies": [],
-  "documentation": "https://github.com/shivan/homeassistant-liquidcheck",
-  "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/shivan/homeassistant-liquidcheck/issues",
-  "requirements": [],
-  "version": "1.0.0"
+    "domain": "liquid_check",
+    "name": "Liquid-Check",
+    "codeowners":
+    [
+        "@shivan"
+    ],
+    "config_flow": true,
+    "dependencies":
+    [],
+    "documentation": "https://github.com/shivan/homeassistant-liquidcheck",
+    "iot_class": "local_polling",
+    "issue_tracker": "https://github.com/shivan/homeassistant-liquidcheck/issues",
+    "requirements":
+    [],
+    "version": "1.0.2"
 }
