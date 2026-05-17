@@ -5,7 +5,6 @@ from typing import Any
 
 from aiohttp import ClientError, ClientSession
 
-
 START_MEASURE_PAYLOAD: dict[str, Any] = {
     "header": {
         "namespace": "Device.Control",
@@ -16,10 +15,8 @@ START_MEASURE_PAYLOAD: dict[str, Any] = {
     "payload": None,
 }
 
-
 class LiquidCheckApiError(Exception):
     """Liquid-Check communication error."""
-
 
 class LiquidCheckApi:
     def __init__(self, session: ClientSession, host: str) -> None:
@@ -41,13 +38,11 @@ class LiquidCheckApi:
             raise LiquidCheckApiError(str(err)) from err
 
         if not isinstance(data, dict):
-            raise LiquidCheckApiError("Liquid-Check response is not a JSON object")
+            raise LiquidCheckApiError("Liquid-Check Antwort ist kein JSON-Objekt")
 
         payload = data.get("payload", data)
-
         if not isinstance(payload, dict):
-            raise LiquidCheckApiError("Liquid-Check response does not contain a valid payload")
-
+            raise LiquidCheckApiError("Liquid-Check Antwort enthält kein gültiges payload")
         return payload
 
     async def async_start_measure(self) -> None:
