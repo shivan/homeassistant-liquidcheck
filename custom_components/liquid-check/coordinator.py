@@ -1,59 +1,36 @@
-"""Provides the Liquid-Check DataUpdateCoordinator."""
-from datetime import timedelta
-import logging
-import requests
-import json
+from __future__ import annotations
 
-from async_timeout import timeout
-from homeassistant.util.dt import utcnow
-from homeassistant.const import CONF_HOST
+from datetime import timedelta
+from typing import Any
+import logging
+
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN
+from .api import LiquidCheckApi, LiquidCheckApiError
+from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-
-class LiquidCheckDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching Liquid-Check data."""
-
-    def __init__(self, hass: HomeAssistant, *, config: dict, options: dict):
-        """Initialize global liquitd-check data updater."""
-        self._host = config[CONF_HOST]
-        self._next_update = 0
-        update_interval = timedelta(seconds=30)
-
+class LiquidCheckCoordinator(DataUpdateCoordinator[dict[str, Any]]):
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        api: LiquidCheckApi,
+        scan_interval: int = DEFAULT_SCAN_INTERVAL,
+    ) -> None:
         super().__init__(
             hass,
-            _LOGGER,
+            logger=_LOGGER,
             name=DOMAIN,
-            update_interval=update_interval,
+            update_interval=timedelta(seconds=max(10, int(scan_interval))),
         )
+        self.api = api
 
-    async def _async_update_data(self) -> dict:
-        """Fetch data from LiquidCheck."""
-
-        def _update_data() -> dict:
-            """Fetch data from Liquid-Check via sync functions."""
-            data = self.data_update()
-
-            return {
-                "data": data["payload"]
-            }
-
+    async def _async_update_data(self) -> dict[str, Any]:
         try:
-            async with timeout(4):
-                return await self.hass.async_add_executor_job(_update_data)
-        except Exception as error:
-            raise UpdateFailed(f"Invalid response from API: {error}") from error
+            data = await self.api.async_get_infos()
+        except LiquidCheckApiError as err:
+            raise UpdateFailed(str(err)) from err
 
-    def data_update(self):
-        """Update liquid check data."""
-        try:
-            response = requests.get(f"http://{self._host}/infos.json")
-            data = json.loads(response.text)
-            _LOGGER.debug(data)
-            return data
-        except:
-            pass
+        return data

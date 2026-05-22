@@ -1,112 +1,45 @@
-"""Config flow for liquid-check integration."""
-# import logging
+from __future__ import annotations
+
+from typing import Any
 
 import voluptuous as vol
-import requests
-import json
-from requests.exceptions import HTTPError, ConnectTimeout
 
 from homeassistant import config_entries
-import homeassistant.helpers.config_validation as cv
+from homeassistant.const import CONF_HOST
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from homeassistant.const import (
-    CONF_HOST,
-    CONF_MONITORED_CONDITIONS,
-)
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.util import slugify
-
-from .const import DOMAIN, SENSOR_TYPES  # pylint:disable=unused-import
-
-SUPPORTED_SENSOR_TYPES = list(SENSOR_TYPES)
-
-DEFAULT_MONITORED_CONDITIONS = [
-    "firmware",
-    "measure_percent",
-    "content_liters",
-]
-
-
-@callback
-def liquidcheck_entries(hass: HomeAssistant):
-    """Return the hosts for the domain."""
-    return set(
-        (entry.data[CONF_HOST]) for entry in hass.config_entries.async_entries(DOMAIN)
-    )
-
+from .api import LiquidCheckApi, LiquidCheckApiError
+from .const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
 
 class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Liquid-Check config flow."""
-
     VERSION = 1
 
-    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
-
-    def __init__(self) -> None:
-        """Initialize the config flow."""
-        self._errors = {}
-        self._info = {}
-
-    def _host_in_configuration_exists(self, host) -> bool:
-        """Return True if site_id exists in configuration."""
-        if host in liquidcheck_entries(self.hass):
-            return True
-        return False
-
-    def _check_host(self, host) -> bool:
-        """Check if we can connect to the liquid-check."""
-        try:
-            response = requests.get(f"http://{host}/infos.json")
-            self._info = json.loads(response.text)
-        except (ConnectTimeout, HTTPError):
-            self._errors[CONF_HOST] = "could_not_connect"
-            return False
-
-        return True
-
-    async def async_step_user(self, user_input=None):
-        """Handle the initial step."""
-
+    async def async_step_user(self, user_input: dict[str, Any] | None = None):
+        errors: dict[str, str] = {}
         if user_input is not None:
-            if self._host_in_configuration_exists(user_input[CONF_HOST]):
-                self._errors[CONF_HOST] = "host_exists"
+            host = user_input[CONF_HOST].strip().removeprefix("http://").removeprefix("https://").rstrip("/")
+            api = LiquidCheckApi(async_get_clientsession(self.hass), host)
+            try:
+                data = await api.async_get_infos()
+            except LiquidCheckApiError:
+                errors["base"] = "cannot_connect"
             else:
-                host = user_input[CONF_HOST]
-                conditions = user_input[CONF_MONITORED_CONDITIONS]
-                can_connect = await self.hass.async_add_executor_job(
-                    self._check_host, host
+                device = data.get("device", {}) if isinstance(data, dict) else {}
+                unique = str(device.get("uuid") or device.get("serial") or host)
+                await self.async_set_unique_id(unique)
+                self._abort_if_unique_id_configured(updates={CONF_HOST: host})
+                return self.async_create_entry(
+                    title=device.get("name") or f"Liquid-Check {host}",
+                    data={
+                        CONF_HOST: host,
+                        CONF_SCAN_INTERVAL: user_input.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+                    },
                 )
-                if can_connect:
-                    return self.async_create_entry(
-                        title=host,
-                        data={
-                            CONF_HOST: host,
-                            CONF_MONITORED_CONDITIONS: conditions,
-                        },
-                    )
-        else:
-            user_input = {}
-            user_input[CONF_HOST] = "liquid-check"
-            user_input[CONF_MONITORED_CONDITIONS] = DEFAULT_MONITORED_CONDITIONS
 
-        default_monitored_conditions = (
-            [] if self._async_current_entries() else DEFAULT_MONITORED_CONDITIONS
-        )
-        setup_schema = vol.Schema(
+        schema = vol.Schema(
             {
-                vol.Required(CONF_HOST, default=user_input[CONF_HOST]): str,
-                vol.Required(
-                    CONF_MONITORED_CONDITIONS, default=default_monitored_conditions
-                ): cv.multi_select(SUPPORTED_SENSOR_TYPES),
+                vol.Required(CONF_HOST, default="liquid-check.local"): str,
+                vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
             }
         )
-
-        return self.async_show_form(
-            step_id="user", data_schema=setup_schema, errors=self._errors
-        )
-
-    async def async_step_import(self, user_input=None):
-        """Import a config entry."""
-        if self._host_in_configuration_exists(user_input[CONF_HOST]):
-            return self.async_abort(reason="host_exists")
-        return await self.async_step_user(user_input)
+        return self.async_show_form(step_id="user", data_schema=schema, errors=errors)

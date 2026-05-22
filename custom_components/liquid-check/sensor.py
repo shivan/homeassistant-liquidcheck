@@ -1,101 +1,97 @@
-"""The liquid-check integration."""
+from __future__ import annotations
 
-import logging
-from homeassistant.const import CONF_MONITORED_CONDITIONS, CONF_HOST
+from typing import Any
+
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_HOST
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import SENSOR_TYPES, DOMAIN, DATA_COORDINATOR
-from .coordinator import LiquidCheckDataUpdateCoordinator
+from .const import DOMAIN, SENSORS, LiquidCheckSensorDef
 
-_LOGGER = logging.getLogger(__name__)
+# Entity unique_ids and device identifiers must stay compatible with the
+# original shivan/homeassistant-liquidcheck integration. Otherwise Home
+# Assistant treats the same physical Liquid-Check as a new device after the
+# native rewrite and creates duplicate devices/entities.
+LEGACY_SENSOR_NAMES: dict[str, str] = {
+    "firmware": "Firmware Version",
+    "measure_percent": "Füllstand",
+    "content_liters": "Inhalt",
+    "level": "Pegelstand",
+    "age": "Alter",
+    "error": "Fehler",
+}
+from .coordinator import LiquidCheckCoordinator
 
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    coordinator: LiquidCheckCoordinator = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities(
+        [LiquidCheckSensor(coordinator, entry, sensor_def) for sensor_def in SENSORS]
+    )
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Add an Liquid-Check entry."""
-    coordinator: LiquidCheckDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id][
-        DATA_COORDINATOR
-    ]
+def _get_path(data: dict[str, Any], path: tuple[str, ...]) -> Any:
+    value: Any = data
+    for part in path:
+        if not isinstance(value, dict):
+            return None
+        value = value.get(part)
+    return value
 
-    entities = []
+class LiquidCheckSensor(CoordinatorEntity[LiquidCheckCoordinator], SensorEntity):
+    _attr_has_entity_name = True
 
-    host = entry.data[CONF_HOST]
-
-    for sensor in entry.data[CONF_MONITORED_CONDITIONS]:
-        entities.append(LiquidCheckDevice(coordinator, sensor, entry.title, host))
-    async_add_entities(entities)
-
-
-class LiquidCheckDevice(CoordinatorEntity):
-    """Representation of a Liquid-Check device."""
-
-    def __init__(self, coordinator, sensor_type, name, host):
-        """Initialize the sensor."""
+    def __init__(
+        self,
+        coordinator: LiquidCheckCoordinator,
+        entry: ConfigEntry,
+        sensor_def: LiquidCheckSensorDef,
+    ) -> None:
         super().__init__(coordinator)
-        self._sensor = SENSOR_TYPES[sensor_type][0]
-        self._name = name
-        self.type = sensor_type
-        self._data_source = SENSOR_TYPES[sensor_type][3]
-        # json path for data
-        self._data_path = SENSOR_TYPES[sensor_type][4]
-        self.coordinator = coordinator
-        self._last_value = None
-        self._unit_of_measurement = SENSOR_TYPES[self.type][1]
-        self._icon = SENSOR_TYPES[self.type][2]
-        self.serial_number = self.coordinator.data[self._data_source]["device"]["uuid"] + host
-        self.model = self.coordinator.data[self._data_source]["device"]["name"]
-        self._host = host
-        self._attr_unique_id = f"{host}_{sensor_type}"
-        self._attr_name = f"LiquidCheck {host} {sensor_type}"
-        _LOGGER.debug(self.coordinator)
+        self._entry = entry
+        self._sensor_def = sensor_def
+        host = entry.data[CONF_HOST]
 
-    def getDataByPath(self, dataObject, jsonPath):
-        keys = jsonPath.split('/')
-        value = dataObject
-        for key in keys:
-            value = value.get(key)
-            if value is None:
-                return None  # Schlüssel nicht gefunden, gib None zurück
-        return value
+        # No custom EntityDescription object. This avoids the HA 2026
+        # entity_description compatibility problem from the old integration.
+        self._attr_name = sensor_def.name
+        self._legacy_serial = self._get_legacy_serial(host)
+        legacy_sensor_name = LEGACY_SENSOR_NAMES.get(sensor_def.key, sensor_def.name)
+        self._attr_unique_id = f"{self._legacy_serial} {legacy_sensor_name}"
+        self._attr_native_unit_of_measurement = sensor_def.native_unit_of_measurement
+        self._attr_device_class = sensor_def.device_class
+        self._attr_state_class = sensor_def.state_class
+        self._attr_icon = sensor_def.icon
+
+    def _get_legacy_serial(self, host: str) -> str:
+        data = self.coordinator.data or {}
+        device = data.get("device", {}) if isinstance(data, dict) else {}
+        # Old integration used uuid + host as both the device identifier basis
+        # and the entity unique_id prefix. Preserve that exact shape.
+        return f"{device.get('uuid') or device.get('serial') or host}{host}"
 
     @property
-    def name(self):
-        """Return the name of the sensor."""
-        return f"{self._name} {self._sensor}"
+    def native_value(self) -> Any:
+        return _get_path(self.coordinator.data or {}, self._sensor_def.path)
 
     @property
-    def state(self):
-        """Return the state of the device."""
-        try:
-            state = self.getDataByPath(self.coordinator.data[self._data_source], self._data_path)
-            
-            self._last_value = state
-        except Exception as ex:
-            _LOGGER.error(ex)
-            state = self._last_value
+    def device_info(self) -> DeviceInfo:
+        data = self.coordinator.data or {}
+        device = data.get("device", {}) if isinstance(data, dict) else {}
+        host = self._entry.data[CONF_HOST]
+        serial = self._get_legacy_serial(host)
 
-        return state
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement this sensor expresses itself in."""
-        return self._unit_of_measurement
-
-    @property
-    def icon(self):
-        """Return icon."""
-        return self._icon
-
-    @property
-    def unique_id(self):
-        """Return unique id based on device serial and variable."""
-        return "{} {}".format(self.serial_number, self._sensor)
-
-    @property
-    def device_info(self):
-        """Return information about the device."""
-        return {
-            "identifiers": {(DOMAIN, self.serial_number)},
-            "name": self._name,
-            "manufacturer": "SI-Elektronik GmbH",
-            "model": self.model,
-        }
+        return DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=device.get("name") or self._entry.title,
+            manufacturer="SI-Elektronik GmbH",
+            model="Liquid-Check",
+            sw_version=device.get("firmware"),
+            configuration_url=f"http://{host}",
+        )
