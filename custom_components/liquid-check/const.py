@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import PERCENTAGE, Platform
 
-DOMAIN = "liquid_check"
+DOMAIN = "liquid-check"
 PLATFORMS = [Platform.SENSOR]
 
 DEFAULT_SCAN_INTERVAL = 30
