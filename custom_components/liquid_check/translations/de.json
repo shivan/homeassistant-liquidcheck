@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Liquid-Check einrichten",
+        "description": "IP-Adresse oder Hostnamen des Liquid-Check eingeben.",
+        "data": {
+          "host": "Host/IP",
+          "scan_interval": "Abfrageintervall in Sekunden"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen. Prüfe IP-Adresse und ob /infos.json erreichbar ist."
+    },
+    "abort": {
+      "already_configured": "Dieses Liquid-Check-Gerät ist bereits eingerichtet."
+    }
+  }
+}
