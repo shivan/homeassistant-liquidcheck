@@ -3,15 +3,15 @@
     "step": {
       "user": {
         "title": "Set up Liquid-Check",
-        "description": "Enter the IP address or hostname of the Liquid-Check device.",
+        "description": "Enter the IP address or hostname of your Liquid-Check device.",
         "data": {
           "host": "Host/IP",
-          "scan_interval": "Polling interval in seconds"
+          "scan_interval": "Scan interval in seconds"
         }
       }
     },
     "error": {
-      "cannot_connect": "Connection failed. Check the IP address and ensure that /infos.json is reachable."
+      "cannot_connect": "Connection failed. Check the IP address and make sure /infos.json is reachable."
     },
     "abort": {
       "already_configured": "This Liquid-Check device is already configured."

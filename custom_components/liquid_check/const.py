@@ -39,7 +39,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
         path=("measure", "content"),
         native_unit_of_measurement="L",
         device_class=SensorDeviceClass.VOLUME,
-        state_class=SensorStateClass.TOTAL,
+        state_class=None,
         icon="mdi:water",
     ),
     LiquidCheckSensorDef(
