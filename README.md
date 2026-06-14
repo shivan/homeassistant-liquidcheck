@@ -18,6 +18,8 @@ Home Assistant integration for **Liquid-Check**, a high-precision water level me
 
 ## Installation
 
+Version 2.x Requires Home Assistant 2025.6.0 or newer.
+
 ### Option 1: HACS (Recommended)
 
 1. Open **HACS** in Home Assistant.
