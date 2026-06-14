@@ -2,9 +2,6 @@
   "name": "Liquid-Check",
   "content_in_root": false,
   "render_readme": true,
-  "domains": [
-    "sensor"
-  ],
   "homeassistant": "2025.6.0",
   "hacs": "2.0.0"
 }
