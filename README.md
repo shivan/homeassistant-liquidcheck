@@ -16,6 +16,12 @@ Home Assistant integration for **Liquid-Check**, a high-precision water level me
 - **Easy Setup:** Full support for Home Assistant Config Flow (UI-based configuration).
 - **Service Integration:** Trigger manual measurements via Home Assistant services.
 
+## Upgrade
+
+Upgrade for 1.x to 2.x needs re-installation because of major changes. Please uninstall the integration and then re-install.
+
+Unfortunately there is no clean upgrade path without a fresh installation. (at least not without breaking hassfest or hacs checks)
+
 ## Installation
 
 Version 2.x Requires Home Assistant 2025.6.0 or newer.
