@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Documentation and translations were expanded for the updated entity and configuration model
 - Legacy sensor name mapping (`LEGACY_SENSOR_NAMES`) was intentionally not adopted to keep translation-key based naming consistent
 - Coordinator now retries once after transient API read failures to reduce random "invalid response" log noise
+- Config and options validation now tries `.local` hostname fallback for bare hostnames (e.g. `liquid-check` -> `liquid-check.local`)
 
 ## [1.1.2] - 2026-06-15
 

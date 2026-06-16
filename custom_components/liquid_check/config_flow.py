@@ -17,6 +17,29 @@ class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     @staticmethod
+    def _sanitize_host(raw_host: str) -> str:
+        return raw_host.strip().removeprefix("http://").removeprefix("https://").rstrip("/")
+
+    @classmethod
+    async def _async_validate_host(cls, hass, raw_host: str) -> tuple[str, dict[str, Any]]:
+        host = cls._sanitize_host(raw_host)
+
+        candidates = [host]
+        if "." not in host and ":" not in host and not host.endswith(".local"):
+            candidates.append(f"{host}.local")
+
+        last_error: LiquidCheckApiError | None = None
+        for candidate in candidates:
+            api = LiquidCheckApi(async_get_clientsession(hass), candidate)
+            try:
+                data = await api.async_get_infos()
+                return candidate, data
+            except LiquidCheckApiError as err:
+                last_error = err
+
+        raise last_error or LiquidCheckApiError("cannot_connect")
+
+    @staticmethod
     def _device_unique_id(device: dict[str, Any], host: str) -> str:
         value = device.get("uuid")
         if isinstance(value, str) and value.strip():
@@ -33,10 +56,8 @@ class LiquidCheckConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors: dict[str, str] = {}
         if user_input is not None:
-            host = user_input[CONF_HOST].strip().removeprefix("http://").removeprefix("https://").rstrip("/")
-            api = LiquidCheckApi(async_get_clientsession(self.hass), host)
             try:
-                data = await api.async_get_infos()
+                host, data = await self._async_validate_host(self.hass, user_input[CONF_HOST])
             except LiquidCheckApiError:
                 errors["base"] = "cannot_connect"
             else:
@@ -80,10 +101,11 @@ class LiquidCheckOptionsFlow(config_entries.OptionsFlowWithConfigEntry):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            host = user_input[CONF_HOST].strip().removeprefix("http://").removeprefix("https://").rstrip("/")
-            api = LiquidCheckApi(async_get_clientsession(self.hass), host)
             try:
-                await api.async_get_infos()
+                host, _ = await LiquidCheckConfigFlow._async_validate_host(
+                    self.hass,
+                    user_input[CONF_HOST],
+                )
             except LiquidCheckApiError:
                 errors["base"] = "cannot_connect"
             else:
