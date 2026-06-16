@@ -42,7 +42,6 @@ class LiquidCheckSensor(LiquidCheckEntity, SensorEntity):
 
         # No custom EntityDescription object. This avoids the HA 2026
         # entity_description compatibility problem from the old integration.
-        self._attr_name = sensor_def.name
         self._attr_translation_key = sensor_def.key
         self._attr_unique_id = f"{self._get_legacy_serial()}_{sensor_def.key}"
         self._attr_suggested_object_id = sensor_def.key

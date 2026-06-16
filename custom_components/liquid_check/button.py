@@ -28,7 +28,6 @@ class LiquidCheckStartMeasureButton(
     _refresh_delay_seconds = 10
     _attr_has_entity_name = True
     _attr_entity_registry_enabled_default = True
-    _attr_name = "Messung starten"
     _attr_translation_key = "start_measure"
     _attr_icon = "mdi:play-circle-outline"
 

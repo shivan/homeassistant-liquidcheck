@@ -29,7 +29,7 @@ class LiquidCheckSensorDef:
 SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     LiquidCheckSensorDef(
         key="measure_percent",
-        name="Füllstand",
+        name="Level",
         path=("measure", "percent"),
         native_unit_of_measurement=PERCENTAGE,
         device_class=None,
@@ -38,7 +38,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="content_liters",
-        name="Inhalt",
+        name="Content",
         path=("measure", "content"),
         native_unit_of_measurement="L",
         device_class=SensorDeviceClass.VOLUME,
@@ -48,7 +48,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="level",
-        name="Pegelstand",
+        name="Water level",
         path=("measure", "level"),
         native_unit_of_measurement="m",
         device_class=SensorDeviceClass.DISTANCE,
@@ -57,7 +57,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="age",
-        name="Letzte Messung",
+        name="Last measurement",
         path=("measure", "age"),
         native_unit_of_measurement="s",
         device_class=SensorDeviceClass.DURATION,
@@ -67,7 +67,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="error",
-        name="Fehler",
+        name="Error",
         path=("system", "error"),
         icon="mdi:alert-circle-outline",
     ),
@@ -87,7 +87,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="tank_max_level",
-        name="Tankhöhe",
+        name="Tank max level",
         path=("measure", "tank", "maxLevel"),
         native_unit_of_measurement="m",
         device_class=SensorDeviceClass.DISTANCE,
@@ -108,7 +108,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="pump_total_runs",
-        name="Pumpenstarts",
+        name="Pump starts",
         path=("system", "pump", "totalRuns"),
         state_class=SensorStateClass.TOTAL_INCREASING,
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -117,7 +117,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="pump_total_runtime",
-        name="Pumpenlaufzeit gesamt",
+        name="Pump total runtime",
         path=("system", "pump", "totalRuntime"),
         native_unit_of_measurement="s",
         device_class=SensorDeviceClass.DURATION,
@@ -128,7 +128,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="wifi_rssi",
-        name="WLAN Signal",
+        name="Wi-Fi signal",
         path=("wifi", "accessPoint", "rssi"),
         native_unit_of_measurement="dBm",
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
@@ -138,7 +138,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="wifi_ssid",
-        name="WLAN SSID",
+        name="Wi-Fi SSID",
         path=("wifi", "accessPoint", "ssid"),
         entity_category=EntityCategory.DIAGNOSTIC,
         icon="mdi:wifi-settings",
