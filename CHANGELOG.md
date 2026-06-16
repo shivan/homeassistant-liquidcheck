@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 - No changes yet.
 
+## [2.1.0] - 2026-06-16
+
+### Added
+
+- Button entity to trigger a Liquid-Check measurement directly from the Home Assistant UI
+- Additional diagnostic entities for hardware, Wi-Fi, uptime, pump statistics, and tank max level
+- Dedicated rationale and PR documentation for the upstream sync
+
+### Changed
+
+- Bumped the integration to the 2.1.x line on top of upstream `2.0.25`
+- Added an options flow for updating Host/IP and polling interval after setup
+- Reload handling now applies option changes cleanly without re-adding the integration
+- Service `liquid_check.start_measure` now supports targeted execution by `entry_id` and delayed refresh
+- Shared base entity logic now keeps device metadata consistent across sensors and button entities
+- Documentation and translations were expanded for the updated entity and configuration model
+
 ## [1.1.2] - 2026-06-15
 
 ### Changed
