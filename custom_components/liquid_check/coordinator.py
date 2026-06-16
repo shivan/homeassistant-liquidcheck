@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 from typing import Any
 import logging
@@ -31,6 +32,12 @@ class LiquidCheckCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         try:
             data = await self.api.async_get_infos()
         except LiquidCheckApiError as err:
-            raise UpdateFailed(str(err)) from err
+            # Some devices occasionally return a transient invalid/empty payload.
+            # Retry once shortly after the first failure to reduce noisy logs.
+            await asyncio.sleep(1)
+            try:
+                data = await self.api.async_get_infos()
+            except LiquidCheckApiError as retry_err:
+                raise UpdateFailed(str(retry_err)) from retry_err
 
         return data

@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Shared base entity logic now keeps device metadata consistent across sensors and button entities
 - Documentation and translations were expanded for the updated entity and configuration model
 - Legacy sensor name mapping (`LEGACY_SENSOR_NAMES`) was intentionally not adopted to keep translation-key based naming consistent
+- Coordinator now retries once after transient API read failures to reduce random "invalid response" log noise
 
 ## [1.1.2] - 2026-06-15
 
