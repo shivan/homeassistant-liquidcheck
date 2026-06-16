@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
-from homeassistant.const import PERCENTAGE, Platform
+from homeassistant.const import PERCENTAGE, Platform, UnitOfTime
 from homeassistant.helpers.entity import EntityCategory
 
 DOMAIN = "liquid_check"
@@ -99,11 +99,11 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
         key="system_uptime",
         name="Uptime",
         path=("system", "uptime"),
-        native_unit_of_measurement="s",
+        native_unit_of_measurement=UnitOfTime.DAYS,
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
-        suggested_display_precision=0,
+        suggested_display_precision=1,
         icon="mdi:timer-sand",
     ),
     LiquidCheckSensorDef(
@@ -119,11 +119,11 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
         key="pump_total_runtime",
         name="Pump total runtime",
         path=("system", "pump", "totalRuntime"),
-        native_unit_of_measurement="s",
+        native_unit_of_measurement=UnitOfTime.HOURS,
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.TOTAL_INCREASING,
         entity_category=EntityCategory.DIAGNOSTIC,
-        suggested_display_precision=0,
+        suggested_display_precision=1,
         icon="mdi:pump",
     ),
     LiquidCheckSensorDef(

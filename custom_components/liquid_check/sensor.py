@@ -55,11 +55,13 @@ class LiquidCheckSensor(LiquidCheckEntity, SensorEntity):
     @property
     def native_value(self) -> Any:
         value = _get_path(self.coordinator.data or {}, self._sensor_def.path)
+        if self._sensor_def.key == "system_uptime" and isinstance(value, (int, float)):
+            return round(float(value) / 86400.0, 1)
+        if self._sensor_def.key == "pump_total_runtime" and isinstance(value, (int, float)):
+            return round(float(value) / 3600.0, 1)
         if self._sensor_def.key in {
             "content_liters",
             "age",
-            "system_uptime",
-            "pump_total_runtime",
             "pump_total_runs",
         } and isinstance(value, (int, float)):
             return int(round(value))
