@@ -65,9 +65,9 @@ Example:
 
 ```yaml
 action:
-   - service: liquid_check.start_measure
-      data:
-         entry_id: "01J..."
+  - service: liquid_check.start_measure
+    data:
+      entry_id: "01J..."
 ```
 
 ### Button entity
