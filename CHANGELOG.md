@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Service `liquid_check.start_measure` now supports targeted execution by `entry_id` and delayed refresh
 - Shared base entity logic now keeps device metadata consistent across sensors and button entities
 - Documentation and translations were expanded for the updated entity and configuration model
+- Legacy sensor name mapping (`LEGACY_SENSOR_NAMES`) was intentionally not adopted to keep translation-key based naming consistent
 
 ## [1.1.2] - 2026-06-15
 

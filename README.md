@@ -1,9 +1,16 @@
 # Liquid-Check for Home Assistant
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
+![Version](https://img.shields.io/github/v/release/shivan/homeassistant-liquidcheck)
+
 Home Assistant custom integration for **Liquid-Check** by SI-Elektronik.
 
 Liquid-Check is a water level meter for cisterns. For device details, visit:
 https://liquid-check-info.si-elektronik.de/
+
+<p align="center">
+	<img src="https://raw.githubusercontent.com/shivan/homeassistant-liquidcheck/main/brand/logo.png" width="150">
+</p>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
@@ -18,12 +25,18 @@ https://liquid-check-info.si-elektronik.de/
 
 ## Installation
 
+Version 2.x requires Home Assistant 2025.6.0 or newer.
+
 ### Option 1: HACS (recommended)
 
 1. Open **HACS** in Home Assistant.
 2. Click **Explore & Download Repositories**.
 3. Search for **Liquid-Check**.
 4. Download and restart Home Assistant.
+
+If the repository is not listed in your HACS setup, add:
+
+`https://github.com/shivan/homeassistant-liquidcheck` as **Integration** custom repository.
 
 ### Option 2: Manual
 
@@ -32,6 +45,11 @@ Copy this repository's integration folder to:
 `<config>/custom_components/liquid_check/`
 
 Then restart Home Assistant.
+
+## Upgrade
+
+Upgrade from 1.x to 2.x may require re-installation due to major structural changes.
+If entities/devices do not migrate cleanly, remove and re-add the integration.
 
 ## Configuration
 
@@ -92,6 +110,11 @@ action:
 
 A button entity is created per device to start a measurement directly from the UI.
 After pressing the button, the integration waits ~10 seconds and then refreshes values.
+
+## Compatibility notes
+
+- `LEGACY_SENSOR_NAMES` from older implementations was intentionally **not** reintroduced.
+- The integration now uses translation keys and stable key-based entity naming for cleaner localization and long-term maintainability.
 
 ## Which file is responsible for what?
 

@@ -3,15 +3,15 @@
     "name": "Liquid-Check",
     "codeowners":
     [
-        "@7weazel7"
+        "@shivan"
     ],
     "config_flow": true,
     "dependencies":
     [],
-    "documentation": "https://github.com/7weazel7/homeassistant-liquidcheck",
+    "documentation": "https://github.com/shivan/homeassistant-liquidcheck",
     "integration_type": "device",
     "iot_class": "local_polling",
-    "issue_tracker": "https://github.com/7weazel7/homeassistant-liquidcheck/issues",
+    "issue_tracker": "https://github.com/shivan/homeassistant-liquidcheck/issues",
     "requirements":
     [],
     "version": "2.1.0"
