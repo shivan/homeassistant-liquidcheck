@@ -75,7 +75,7 @@ Note: the example screenshot currently uses German labels in the Home Assistant 
 The integration provides sensors such as:
 
 - Level (%)
-- Content (L)
+- Contents (L)
 - Water level (m)
 - Last measurement (duration)
 - Error

@@ -38,7 +38,7 @@ SENSORS: tuple[LiquidCheckSensorDef, ...] = (
     ),
     LiquidCheckSensorDef(
         key="content_liters",
-        name="Content",
+        name="Contents",
         path=("measure", "content"),
         native_unit_of_measurement="L",
         device_class=SensorDeviceClass.VOLUME,
