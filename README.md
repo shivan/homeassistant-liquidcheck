@@ -9,7 +9,7 @@ Liquid-Check is a water level meter for cisterns. For device details, visit:
 https://liquid-check-info.si-elektronik.de/
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/shivan/homeassistant-liquidcheck/main/brand/logo.png" width="150">
+	<img src="https://raw.githubusercontent.com/shivan/homeassistant-liquidcheck/main/custom_components/liquid_check/brand/logo.png" width="150">
 </p>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
@@ -25,7 +25,7 @@ https://liquid-check-info.si-elektronik.de/
 
 ## Installation
 
-Version 2.x requires Home Assistant 2025.6.0 or newer.
+Version 2.x requires Home Assistant 2026.6.0 or newer.
 
 ### Option 1: HACS (recommended)
 
