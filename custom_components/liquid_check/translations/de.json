@@ -16,5 +16,77 @@
     "abort": {
       "already_configured": "Dieses Liquid-Check-Gerät ist bereits eingerichtet."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Integrationsoptionen",
+        "description": "Laufzeitverhalten für Liquid-Check anpassen.",
+        "data": {
+          "host": "Host/IP",
+          "scan_interval": "Abfrageintervall in Sekunden"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "measure_percent": {
+        "name": "Füllstand"
+      },
+      "content_liters": {
+        "name": "Inhalt"
+      },
+      "level": {
+        "name": "Pegelstand"
+      },
+      "age": {
+        "name": "Letzte Messung"
+      },
+      "error": {
+        "name": "Fehler"
+      },
+      "firmware": {
+        "name": "Firmware"
+      },
+      "hardware": {
+        "name": "Hardware"
+      },
+      "tank_max_level": {
+        "name": "Tankhöhe"
+      },
+      "system_uptime": {
+        "name": "Systemlaufzeit"
+      },
+      "pump_total_runs": {
+        "name": "Pumpenstarts"
+      },
+      "pump_total_runtime": {
+        "name": "Pumpenlaufzeit gesamt"
+      },
+      "wifi_rssi": {
+        "name": "WLAN Signal"
+      },
+      "wifi_ssid": {
+        "name": "WLAN SSID"
+      }
+    },
+    "button": {
+      "start_measure": {
+        "name": "Messung starten"
+      }
+    }
+  },
+  "services": {
+    "start_measure": {
+      "name": "Messung starten",
+      "description": "Startet eine neue Liquid-Check-Messung.",
+      "fields": {
+        "entry_id": {
+          "name": "Config Entry ID",
+          "description": "Optional. Nur dieses Liquid-Check-Gerät auslösen."
+        }
+      }
+    }
   }
 }

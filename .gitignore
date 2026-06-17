@@ -1,2 +1,6 @@
 dev-env/
 .DS_Store
+.vscode/
+**/.vscode/
+__pycache__/
+*.pyc

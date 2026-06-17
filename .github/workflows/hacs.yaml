@@ -11,6 +11,7 @@ permissions: {}
 
 jobs:
   validate-hacs:
+    name: HACS validation
     runs-on: "ubuntu-latest"
     steps:
       - name: HACS validation

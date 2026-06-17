@@ -3,18 +3,90 @@
     "step": {
       "user": {
         "title": "Set up Liquid-Check",
-        "description": "Enter the IP address or hostname of your Liquid-Check device.",
+        "description": "Enter the IP address or hostname of the Liquid-Check device.",
         "data": {
           "host": "Host/IP",
-          "scan_interval": "Scan interval in seconds"
+          "scan_interval": "Polling interval in seconds"
         }
       }
     },
     "error": {
-      "cannot_connect": "Connection failed. Check the IP address and make sure /infos.json is reachable."
+      "cannot_connect": "Connection failed. Check the IP address and ensure that /infos.json is reachable."
     },
     "abort": {
       "already_configured": "This Liquid-Check device is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Integration options",
+        "description": "Adjust runtime behavior for Liquid-Check.",
+        "data": {
+          "host": "Host/IP",
+          "scan_interval": "Polling interval in seconds"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "measure_percent": {
+        "name": "Level"
+      },
+      "content_liters": {
+        "name": "Contents"
+      },
+      "level": {
+        "name": "Water level"
+      },
+      "age": {
+        "name": "Last measurement"
+      },
+      "error": {
+        "name": "Error"
+      },
+      "firmware": {
+        "name": "Firmware"
+      },
+      "hardware": {
+        "name": "Hardware"
+      },
+      "tank_max_level": {
+        "name": "Tank max level"
+      },
+      "system_uptime": {
+        "name": "System uptime"
+      },
+      "pump_total_runs": {
+        "name": "Pump starts"
+      },
+      "pump_total_runtime": {
+        "name": "Pump total runtime"
+      },
+      "wifi_rssi": {
+        "name": "Wi-Fi signal"
+      },
+      "wifi_ssid": {
+        "name": "Wi-Fi SSID"
+      }
+    },
+    "button": {
+      "start_measure": {
+        "name": "Start measurement"
+      }
+    }
+  },
+  "services": {
+    "start_measure": {
+      "name": "Start measurement",
+      "description": "Starts a new Liquid-Check measurement.",
+      "fields": {
+        "entry_id": {
+          "name": "Config Entry ID",
+          "description": "Optional. Trigger only this Liquid-Check device."
+        }
+      }
     }
   }
 }
